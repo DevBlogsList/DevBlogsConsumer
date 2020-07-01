@@ -9,14 +9,32 @@ namespace DevBlogsConsumer.Repositories.Contracts
         [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
         public string Id { get; set; }
 
-        [BsonElement("name")]
-        public string Name { get; set; }
+        [BsonElement("blogid")]
+        public string BlogId { get; set; }
 
-        [BsonElement("url")]
-        public string Url { get; set; }
+        [BsonElement("title")]
+        public string Title { get; set; }
+
+        [BsonElement("subtitle")]
+        public string Subtitle { get; set; }
+
+        [BsonElement("author")]
+        public string[] Author { get; set; }
+
+        [BsonElement("link")]
+        public string Link { get; set; }
 
         [BsonElement("feed")]
-        public string Feed { get; set; }
+        public Feed Feed { get; set; }
+
+        [BsonElement("category")]
+        public string[] Category { get; set; }
+
+        [BsonElement("icon")]
+        public string Icon { get; set; }
+
+        [BsonElement("logo")]
+        public string Logo { get; set; }
 
         [BsonElement("active")]
         public bool IsActive { get; set; }
