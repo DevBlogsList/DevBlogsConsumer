@@ -8,10 +8,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DevBlogsConsumer.Repositories.Tests
+namespace DevBlogsConsumer.Repositories.Tests.BlogRepositoryTests
 {
+    [TestCategory(TEST_CATEGORY)]
     [TestClass]
-    public class GetBlogsTests
+    public class GetBlogsTests : BaseBlogRepositoryTests
     {
         private IAsyncCursor<Blog> _blogs;
         private Mock<IMongoCollection<Blog>> _mockBlogCollection;
