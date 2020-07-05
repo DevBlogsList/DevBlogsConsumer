@@ -12,9 +12,9 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
 {
     [TestCategory(TEST_CATEGORY)]
     [TestClass]
-    public class GetArticlesForBlogTests : BaseArticleRepositoryTests
+    public class GetArticleIdsForBlogTests : BaseArticleRepositoryTests
     {
-        private IAsyncCursor<Article> _articles;
+        private IAsyncCursor<string> _articleIds;
         private string _blogId;
 
         [TestInitialize]
@@ -24,60 +24,60 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
             _articleRepository = new ArticleRepository(_mockArticleCollection.Object);
             _blogId = BLOG_ID;
 
-            _articles = Enumerable.Empty<Article>() as IAsyncCursor<Article>;
+            _articleIds = Enumerable.Empty<string>() as IAsyncCursor<string>;
 
             _mockArticleCollection
                 .Setup(x => x.FindAsync(
                     It.IsAny<FilterDefinition<Article>>(),
-                    It.IsAny<FindOptions<Article, Article>>(),
+                    It.IsAny<FindOptions<Article, string>>(),
                     It.IsAny<CancellationToken>()
                 ))
-                .ReturnsAsync(() => _articles);
+                .ReturnsAsync(() => _articleIds);
         }
 
         [TestMethod]
-        public async Task GetArticlesForBlog_ReturnsArticlesForBlog()
+        public async Task GetArticleIdsForBlog_ReturnsArticleIdsForBlog()
         {
-            IAsyncCursor<Article> articles = await _articleRepository.GetArticlesForBlog(_blogId);
+            IAsyncCursor<string> articleIds = await _articleRepository.GetArticleIdsForBlog(_blogId);
 
             _mockArticleCollection.Verify(
                 x => x.FindAsync(
                     It.IsAny<FilterDefinition<Article>>(),
-                    It.IsAny<FindOptions<Article, Article>>(),
+                    It.IsAny<FindOptions<Article, string>>(),
                     It.IsAny<CancellationToken>()
                 ), Times.Once);
 
-            articles.ShouldBeSameAs(_articles);
+            articleIds.ShouldBeSameAs(_articleIds);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "blogId cannot be null. (Parameter 'blogId')")]
-        public async Task GetArticlesForBlog_DoesNotAllowNullBlogId()
+        public async Task GetArticleIdsForBlog_DoesNotAllowNullBlogId()
         {
             _blogId = null;
 
-            IAsyncCursor<Article> articles = await _articleRepository.GetArticlesForBlog(_blogId);
+            IAsyncCursor<string> articleIds = await _articleRepository.GetArticleIdsForBlog(_blogId);
 
             _mockArticleCollection.Verify(
                 x => x.FindAsync(
                     It.IsAny<FilterDefinition<Article>>(),
-                    It.IsAny<FindOptions<Article, Article>>(),
+                    It.IsAny<FindOptions<Article, string>>(),
                     It.IsAny<CancellationToken>()
                 ), Times.Never);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "blogId cannot be empty. (Parameter 'blogId')")]
-        public async Task GetArticlesForBlog_DoesNotAllowEmptyBlogId()
+        public async Task GetArticleIdsForBlog_DoesNotAllowEmptyBlogId()
         {
             _blogId = string.Empty;
 
-            IAsyncCursor<Article> articles = await _articleRepository.GetArticlesForBlog(_blogId);
+            IAsyncCursor<string> articleIds = await _articleRepository.GetArticleIdsForBlog(_blogId);
 
             _mockArticleCollection.Verify(
                 x => x.FindAsync(
                     It.IsAny<FilterDefinition<Article>>(),
-                    It.IsAny<FindOptions<Article, Article>>(),
+                    It.IsAny<FindOptions<Article, string>>(),
                     It.IsAny<CancellationToken>()
                 ), Times.Never);
         }

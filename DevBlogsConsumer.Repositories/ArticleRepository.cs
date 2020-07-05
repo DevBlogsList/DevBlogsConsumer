@@ -16,29 +16,22 @@ namespace DevBlogsConsumer.Repositories
             _articleCollection = articleCollection;
         }
 
-        public void InsertArticlesForBlog(string blogId, IEnumerable<Article> articles)
+        public void InsertArticles(IEnumerable<Article> articles)
         {
-            Guard.Argument(blogId, nameof(blogId)).NotNull().NotEmpty();
             Guard.Argument(articles, nameof(articles)).NotNull().NotEmpty();
-
-            // TODO: Add functionality to compare articles already in the database
-
-            // TODO: Use bulk write statement for MongoDB to do insert and updates
 
             _articleCollection.InsertMany(articles);
         }
 
-        public Task<IAsyncCursor<Article>> GetArticlesForBlog(string blogId)
+        public Task<IAsyncCursor<string>> GetArticleIdsForBlog(string blogId)
         {
             Guard.Argument(blogId, nameof(blogId)).NotNull().NotEmpty();
 
-            SortDefinition<Article> sortDefinition = Builders<Article>.Sort.Descending(x => x.Published);
+            FilterDefinition<Article> filterDefinition = Builders<Article>.Filter.Eq(x => x.BlogId, blogId);
+            ProjectionDefinition<Article> projectionDefinition = Builders<Article>.Projection.Include(x => x.ArticleId);
+            FindOptions<Article, string> findOptions = new FindOptions<Article, string> { Projection = projectionDefinition };
 
-            return _articleCollection.FindAsync(
-                x => x.BlogId == blogId, new FindOptions<Article, Article>()
-            {
-                Sort = sortDefinition
-            });
+            return _articleCollection.FindAsync(filterDefinition, findOptions);
         }
     }
 }

@@ -7,8 +7,8 @@ namespace DevBlogsConsumer.Repositories.Interfaces
 {
     public interface IArticleRepository
     {
-        void InsertArticlesForBlog(string blogId, IEnumerable<Article> articles);
+        void InsertArticles(IEnumerable<Article> articles);
 
-        Task<IAsyncCursor<Article>> GetArticlesForBlog(string blogId);
+        Task<IAsyncCursor<string>> GetArticleIdsForBlog(string blogId);
     }
 }
