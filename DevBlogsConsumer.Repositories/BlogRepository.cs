@@ -16,7 +16,9 @@ namespace DevBlogsConsumer.Repositories
 
         public Task<IAsyncCursor<Blog>> GetBlogs()
         {
-            return _blogCollection.FindAsync(x => x.IsActive);
+            FilterDefinition<Blog> filterDefinition = Builders<Blog>.Filter.Empty;
+
+            return _blogCollection.FindAsync(filterDefinition);
         }
     }
 }

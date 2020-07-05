@@ -1,5 +1,4 @@
 ﻿using DevBlogsConsumer.Repositories.Contracts;
-using DevBlogsConsumer.Repositories.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -13,10 +12,9 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
 {
     [TestCategory(TEST_CATEGORY)]
     [TestClass]
-    public class InsertArticlesTests : BaseArticleRepositoryTests
+    public class InsertArticlesForBlogTests : BaseArticleRepositoryTests
     {
-        private Mock<IMongoCollection<Article>> _mockArticleCollection;
-        private IArticleRepository _articleRepository;
+        private string _blogId;
         private IEnumerable<Article> _articles;
 
         [TestInitialize]
@@ -24,6 +22,7 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
         {
             _mockArticleCollection = new Mock<IMongoCollection<Article>>();
             _articleRepository = new ArticleRepository(_mockArticleCollection.Object);
+            _blogId = BLOG_ID;
             _articles = new List<Article>()
             {
                 new Article
@@ -53,9 +52,9 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
         }
 
         [TestMethod]
-        public void InsertArticles_DoesNotThrowException()
+        public void InsertArticlesForBlog_DoesNotThrowException()
         {
-            _articleRepository.InsertArticles(_articles);
+            _articleRepository.InsertArticlesForBlog(_blogId, _articles);
 
             _mockArticleCollection.Verify(
                 x => x.InsertMany(
@@ -66,13 +65,48 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException), "blogId cannot be null. (Parameter 'blogId')")]
+        public void InsertArticlesForBlog_DoesNotAllowNullBlogId()
+        {
+            _blogId = null;
+
+            _articleRepository.InsertArticlesForBlog(_blogId, _articles);
+
+            // TODO: Replace with the functionality for comparing articles already in the database
+            _mockArticleCollection.Verify(
+                x => x.InsertManyAsync(
+                    _articles,
+                    It.IsAny<InsertManyOptions>(),
+                    It.IsAny<CancellationToken>()
+                ), Times.Never);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "blogId cannot be empty. (Parameter 'blogId')")]
+        public void InsertArticlesForBlog_DoesNotAllowEmptyBlogId()
+        {
+            _blogId = string.Empty;
+
+            _articleRepository.InsertArticlesForBlog(_blogId, _articles);
+
+            // TODO: Replace with the functionality for comparing articles already in the database
+            _mockArticleCollection.Verify(
+                x => x.InsertManyAsync(
+                    _articles,
+                    It.IsAny<InsertManyOptions>(),
+                    It.IsAny<CancellationToken>()
+                ), Times.Never);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "articles cannot be null. (Parameter 'articles')")]
-        public void InsertArticles_DoesNotAllowNullArticles()
+        public void InsertArticlesForBlog_DoesNotAllowNullArticles()
         {
             _articles = null;
 
-            _articleRepository.InsertArticles(_articles);
+            _articleRepository.InsertArticlesForBlog(_blogId, _articles);
 
+            // TODO: Replace with the functionality for comparing articles already in the database
             _mockArticleCollection.Verify(
                 x => x.InsertManyAsync(
                     _articles,
@@ -83,12 +117,13 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "articles cannot be empty. (Parameter 'articles')")]
-        public void InsertArticles_DoesNotAllowEmptyArticles()
+        public void InsertArticlesForBlog_DoesNotAllowEmptyArticles()
         {
             _articles = Enumerable.Empty<Article>();
 
-            _articleRepository.InsertArticles(_articles);
+            _articleRepository.InsertArticlesForBlog(_blogId, _articles);
 
+            // TODO: Replace with the functionality for comparing articles already in the database
             _mockArticleCollection.Verify(
                 x => x.InsertManyAsync(
                     _articles,

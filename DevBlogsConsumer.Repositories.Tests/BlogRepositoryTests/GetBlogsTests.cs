@@ -1,5 +1,4 @@
 using DevBlogsConsumer.Repositories.Contracts;
-using DevBlogsConsumer.Repositories.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
@@ -15,8 +14,6 @@ namespace DevBlogsConsumer.Repositories.Tests.BlogRepositoryTests
     public class GetBlogsTests : BaseBlogRepositoryTests
     {
         private IAsyncCursor<Blog> _blogs;
-        private Mock<IMongoCollection<Blog>> _mockBlogCollection;
-        private IBlogRepository _blogRepository;
 
         [TestInitialize]
         public void Initialize()
