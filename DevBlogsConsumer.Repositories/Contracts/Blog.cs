@@ -36,9 +36,6 @@ namespace DevBlogsConsumer.Repositories.Contracts
         [BsonElement("logo")]
         public string Logo { get; set; }
 
-        [BsonElement("active")]
-        public bool IsActive { get; set; }
-
         [BsonElement("created")]
         public BsonDateTime Created { get; set; }
     }
