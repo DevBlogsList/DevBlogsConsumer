@@ -56,14 +56,7 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
         {
             _blogId = null;
 
-            IAsyncCursor<string> articleIds = await _articleRepository.GetArticleIdsForBlog(_blogId);
-
-            _mockArticleCollection.Verify(
-                x => x.FindAsync(
-                    It.IsAny<FilterDefinition<Article>>(),
-                    It.IsAny<FindOptions<Article, string>>(),
-                    It.IsAny<CancellationToken>()
-                ), Times.Never);
+            await _articleRepository.GetArticleIdsForBlog(_blogId);
         }
 
         [TestMethod]
@@ -72,14 +65,7 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
         {
             _blogId = string.Empty;
 
-            IAsyncCursor<string> articleIds = await _articleRepository.GetArticleIdsForBlog(_blogId);
-
-            _mockArticleCollection.Verify(
-                x => x.FindAsync(
-                    It.IsAny<FilterDefinition<Article>>(),
-                    It.IsAny<FindOptions<Article, string>>(),
-                    It.IsAny<CancellationToken>()
-                ), Times.Never);
+            await _articleRepository.GetArticleIdsForBlog(_blogId);
         }
     }
 }

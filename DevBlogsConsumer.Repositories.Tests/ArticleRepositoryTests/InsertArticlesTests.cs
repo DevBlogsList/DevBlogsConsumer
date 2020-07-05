@@ -69,13 +69,6 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
             _articles = null;
 
             _articleRepository.InsertArticles(_articles);
-
-            _mockArticleCollection.Verify(
-                x => x.InsertManyAsync(
-                    _articles,
-                    It.IsAny<InsertManyOptions>(),
-                    It.IsAny<CancellationToken>()
-                ), Times.Never);
         }
 
         [TestMethod]
@@ -85,13 +78,6 @@ namespace DevBlogsConsumer.Repositories.Tests.ArticleRepositoryTests
             _articles = Enumerable.Empty<Article>();
 
             _articleRepository.InsertArticles(_articles);
-
-            _mockArticleCollection.Verify(
-                x => x.InsertManyAsync(
-                    _articles,
-                    It.IsAny<InsertManyOptions>(),
-                    It.IsAny<CancellationToken>()
-                ), Times.Never);
         }
     }
 }
