@@ -8,9 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Moq" Version="4.14.3" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    <PackageReference Include="Shouldly" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DevBlogsConsumer.Repositories\DevBlogsConsumer.Repositories.csproj" />
+    <ProjectReference Include="..\DevBlogsConsumer.Services\DevBlogsConsumer.Services.csproj" />
   </ItemGroup>
 
 </Project>

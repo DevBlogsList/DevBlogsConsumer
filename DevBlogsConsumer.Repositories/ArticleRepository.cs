@@ -3,7 +3,7 @@ using DevBlogsConsumer.Repositories.Contracts;
 using DevBlogsConsumer.Repositories.Interfaces;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace DevBlogsConsumer.Repositories
 {
@@ -23,7 +23,7 @@ namespace DevBlogsConsumer.Repositories
             _articleCollection.InsertMany(articles);
         }
 
-        public Task<IAsyncCursor<string>> GetArticleIdsForBlog(string blogId)
+        public IEnumerable<string> GetArticleIdsForBlog(string blogId)
         {
             Guard.Argument(blogId, nameof(blogId)).NotNull().NotEmpty();
 
@@ -31,7 +31,19 @@ namespace DevBlogsConsumer.Repositories
             ProjectionDefinition<Article> projectionDefinition = Builders<Article>.Projection.Include(x => x.ArticleId);
             FindOptions<Article, string> findOptions = new FindOptions<Article, string> { Projection = projectionDefinition };
 
-            return _articleCollection.FindAsync(filterDefinition, findOptions);
+            IAsyncCursor<string> articles = _articleCollection.FindAsync(filterDefinition, findOptions).Result;
+
+            return articles?.ToEnumerable();
+        }
+
+        public IEnumerable<Article> RemoveDuplicatesByArticleId(
+            IEnumerable<Article> articles,
+            IEnumerable<string> articleIds)
+        {
+            Guard.Argument(articles, nameof(articles)).NotNull().NotEmpty();
+            Guard.Argument(articleIds, nameof(articleIds)).NotNull().NotEmpty();
+
+            return articles.Where(x => !articleIds.Contains(x.ArticleId));
         }
     }
 }

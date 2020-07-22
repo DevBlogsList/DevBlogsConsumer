@@ -1,7 +1,7 @@
 ﻿using DevBlogsConsumer.Repositories.Contracts;
 using DevBlogsConsumer.Repositories.Interfaces;
 using MongoDB.Driver;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DevBlogsConsumer.Repositories
 {
@@ -14,11 +14,13 @@ namespace DevBlogsConsumer.Repositories
             _blogCollection = blogCollection;
         }
 
-        public Task<IAsyncCursor<Blog>> GetBlogs()
+        public IEnumerable<Blog> GetBlogs()
         {
             FilterDefinition<Blog> filterDefinition = Builders<Blog>.Filter.Empty;
 
-            return _blogCollection.FindAsync(filterDefinition);
+            IAsyncCursor<Blog> blogs = _blogCollection.FindAsync(filterDefinition).Result;
+
+            return blogs?.ToEnumerable();
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using DevBlogsConsumer.Repositories.Contracts;
-using MongoDB.Driver;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DevBlogsConsumer.Repositories.Interfaces
 {
     public interface IBlogRepository
     {
-        Task<IAsyncCursor<Blog>> GetBlogs();
+        IEnumerable<Blog> GetBlogs();
     }
 }

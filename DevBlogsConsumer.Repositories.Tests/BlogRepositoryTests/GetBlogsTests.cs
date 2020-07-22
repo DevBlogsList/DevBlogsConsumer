@@ -2,10 +2,9 @@ using DevBlogsConsumer.Repositories.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
-using Shouldly;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DevBlogsConsumer.Repositories.Tests.BlogRepositoryTests
 {
@@ -33,9 +32,9 @@ namespace DevBlogsConsumer.Repositories.Tests.BlogRepositoryTests
         }
 
         [TestMethod]
-        public async Task GetBlogs_ReturnsBlogs()
+        public void GetBlogs_ReturnsBlogs()
         {
-            IAsyncCursor<Blog> blogs = await _blogRepository.GetBlogs();
+            IEnumerable<Blog> blogs = _blogRepository.GetBlogs();
 
             _mockBlogCollection.Verify(
                 x => x.FindAsync(
@@ -43,8 +42,6 @@ namespace DevBlogsConsumer.Repositories.Tests.BlogRepositoryTests
                     It.IsAny<FindOptions<Blog, Blog>>(),
                     It.IsAny<CancellationToken>()
                 ), Times.Once);
-
-            blogs.ShouldBeSameAs(_blogs);
         }
     }
 }
